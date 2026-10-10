@@ -1,6 +1,7 @@
 """
 Python Number Guessing Challenge
-A beginner-friendly mini-project for practicing Python fundamentals.
+Created and developed by Dharmesh Kumar.
+An educational mini-project for practicing Python fundamentals.
 """
 
 import random
@@ -29,7 +30,7 @@ def get_integer(prompt, minimum=None, maximum=None):
 
 
 def choose_difficulty():
-    """Let the player choose a difficulty and return its settings."""
+    """Return settings for the selected difficulty level."""
     difficulties = {
         "1": {"name": "Easy", "maximum": 50, "attempts": 10},
         "2": {"name": "Medium", "maximum": 100, "attempts": 7},
@@ -45,35 +46,33 @@ def choose_difficulty():
         choice = input("Enter 1, 2, or 3: ").strip()
         if choice in difficulties:
             return difficulties[choice]
-        print("Please choose 1, 2, or 3.")
+        print("Invalid choice. Please enter 1, 2, or 3.")
 
 
 def play_round():
-    """Play one round and return the player's score (0 if not won)."""
+    """Play one round and return the score earned."""
     difficulty = choose_difficulty()
     secret_number = random.randint(1, difficulty["maximum"])
     max_attempts = difficulty["attempts"]
     score = 0
 
-    print(f"\nYou chose {difficulty['name']} mode.")
+    print(f"\nDifficulty: {difficulty['name']}")
     print(f"I'm thinking of a number between 1 and {difficulty['maximum']}.")
     print(f"You have {max_attempts} attempts. Good luck!")
 
     for attempt in range(1, max_attempts + 1):
         guess = get_integer(
-            f"\nAttempt {attempt}/{max_attempts} — your guess: ",
+            f"\nAttempt {attempt}/{max_attempts} — enter your guess: ",
             minimum=1,
             maximum=difficulty["maximum"],
         )
 
         if guess == secret_number:
-            remaining_attempts = max_attempts - attempt
-            score = (remaining_attempts + 1) * 10
-            print(f"\n🎉 Correct! The secret number was {secret_number}.")
-            print(f"You scored {score} points.")
+            score = (max_attempts - attempt + 1) * 10
+            print(f"\nCongratulations! The number was {secret_number}.")
+            print(f"You earned {score} points.")
             break
-
-        if guess < secret_number:
+        elif guess < secret_number:
             print("Too low! Try a higher number.")
         else:
             print("Too high! Try a lower number.")
@@ -83,20 +82,21 @@ def play_round():
             print(f"Attempts remaining: {remaining}")
     else:
         print(f"\nGame over! The secret number was {secret_number}.")
-        print("You scored 0 points.")
+        print("You earned 0 points.")
 
     return score
 
 
 def main():
-    """Run game rounds and keep a session score."""
+    """Run multiple rounds and maintain a session summary."""
     total_score = 0
     rounds_played = 0
     rounds_won = 0
 
-    print("=" * 42)
+    print("=" * 44)
     print("       PYTHON NUMBER GUESSING CHALLENGE")
-    print("=" * 42)
+    print("          Created by Dharmesh Kumar")
+    print("=" * 44)
 
     while True:
         score = play_round()
@@ -111,9 +111,10 @@ def main():
         print(f"Rounds won:    {rounds_won}")
         print(f"Total score:   {total_score}")
 
-        again = input("\nPlay another round? (yes/no): ").strip().lower()
-        if again not in {"yes", "y"}:
-            print("\nThanks for playing. Keep practicing Python!")
+        again = input("\nWould you like to play again? (yes/no): ")
+        if again.strip().lower() not in {"yes", "y"}:
+            print("\nThank you for playing!")
+            print("Keep learning and building with Python.")
             break
 
 

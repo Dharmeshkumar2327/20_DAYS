@@ -1,4 +1,4 @@
-# Python bytecode and cache
+# Python cache and compiled files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,10 +8,10 @@ __pycache__/
 venv/
 env/
 
-# IDE/editor settings
+# Editor settings
 .vscode/
 .idea/
 
-# Operating system files
+# OS files
 .DS_Store
 Thumbs.db
