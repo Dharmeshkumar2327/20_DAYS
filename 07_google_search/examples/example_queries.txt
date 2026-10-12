@@ -1,0 +1,7 @@
+# Example search queries (copy one at a time into the terminal)
+Python programming tutorials
+site:docs.python.org pathlib
+filetype:pdf machine learning syllabus
+"data analyst" SQL Power BI jobs
+python OR java tutorial
+-python jobs

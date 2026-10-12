@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "advanced-google-search-dharmesh"
+version = "1.0.0"
+description = "A Python tool to build and open Google Search URLs"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Dharmesh Kumar"}]
+license = {file = "LICENSE"}
+keywords = ["python", "google-search", "cli", "beginner-project"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+]
+
+[tool.setuptools]
+py-modules = ["advanced_google_search"]
