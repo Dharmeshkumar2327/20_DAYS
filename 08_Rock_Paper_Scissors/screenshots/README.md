@@ -1,0 +1,1 @@
+Run the game and save a screenshot of the webcam game window here as `game-demo.png`.\n
