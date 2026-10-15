@@ -1,0 +1,14 @@
+GITHUB UPLOAD STEPS
+
+1. Create a public repository named: advanced-qr-code-generator
+2. Extract this folder and open a terminal inside it.
+3. Run these commands:
+
+git init
+git add .
+git commit -m "Build advanced Python QR code generator"
+git branch -M main
+git remote add origin https://github.com/Dharmeshkumar2327/advanced-qr-code-generator.git
+git push -u origin main
+
+If the repository name or username differs, update the remote URL.
