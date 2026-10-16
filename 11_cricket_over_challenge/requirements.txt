@@ -1,0 +1,2 @@
+# No third-party packages are required.
+# The game uses Python's standard library only.
