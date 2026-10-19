@@ -1,0 +1,1 @@
+Machine learning enables computers to identify patterns in data. Text processing converts written language into useful numerical features. TF-IDF gives greater weight to terms that help distinguish one document from another.

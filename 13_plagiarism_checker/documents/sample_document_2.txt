@@ -1,0 +1,1 @@
+Machine learning systems identify patterns in data. Text analysis converts language into numerical features. TF-IDF weights terms according to how useful they are for distinguishing documents.
