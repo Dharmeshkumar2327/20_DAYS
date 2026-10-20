@@ -1,0 +1,14 @@
+Example gameplay (illustrative)
+
+==========================================
+          WELCOME TO HANGMAN
+==========================================
+Enter your name: Alex
+
+Category: Programming | Word has 6 letters
+Word: _ _ _ _ _ _
+Guessed letters: -
+Lives left: 6
+Guess a letter: p
+Correct! 'p' appears 1 time(s).
+Word: p _ _ _ _ _
