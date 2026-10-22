@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAPTCHA Studio</title>
+<style>
+  :root { --bg:#f4f2fb; --card:#fff; --ink:#1d1b2e; --muted:#6b6880; --accent:#5b5bd6;
+          --ok:#1f8a5b; --bad:#c2410c; --line:#e3e0f0; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14131c; --card:#1e1d2a; --ink:#ecebf5; --muted:#a19eb8; --line:#2e2c40; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg);
+         color:var(--ink); min-height:100vh; display:grid; place-items:center; padding:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px;
+          width:100%; max-width:440px; box-shadow:0 10px 30px rgba(40,30,90,.08); }
+  h1 { margin:0 0 4px; font-size:1.4rem; }
+  p.sub { margin:0 0 20px; color:var(--muted); font-size:.92rem; }
+  .row { display:flex; gap:8px; margin-bottom:14px; }
+  select, input, button { font:inherit; border-radius:10px; border:1px solid var(--line);
+          padding:10px 12px; background:var(--card); color:var(--ink); }
+  select { flex:1; }
+  .img-wrap { position:relative; border:1px solid var(--line); border-radius:12px; overflow:hidden;
+          background:#fff; aspect-ratio: 360/110; }
+  .img-wrap img { width:100%; height:100%; display:block; object-fit:contain; }
+  .tools { display:flex; gap:8px; margin:10px 0 16px; }
+  .tools button { flex:1; cursor:pointer; }
+  input { width:100%; margin-bottom:10px; letter-spacing:.08em; }
+  button.primary { width:100%; background:var(--accent); color:#fff; border:none; cursor:pointer;
+          font-weight:600; }
+  #msg { margin-top:14px; min-height:1.4em; font-weight:500; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  .meta { color:var(--muted); font-size:.82rem; margin-top:8px; }
+</style>
+</head>
+<body>
+<main class="card">
+  <h1>CAPTCHA Studio</h1>
+  <p class="sub">Prove you're human. Answers are case-insensitive.</p>
+
+  <div class="row">
+    <select id="difficulty" aria-label="Difficulty">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <select id="mode" aria-label="Type">
+      <option value="text">Text</option>
+      <option value="math">Math</option>
+    </select>
+  </div>
+
+  <div class="img-wrap"><img id="img" alt="CAPTCHA image"></div>
+  <div class="tools">
+    <button id="refresh" type="button">↻ New CAPTCHA</button>
+    {% if audio %}<button id="listen" type="button" disabled>🔊 Listen</button>{% endif %}
+  </div>
+
+  <form id="form" autocomplete="off">
+    <input id="answer" placeholder="Type the characters / answer" required>
+    <button class="primary">Verify</button>
+  </form>
+  <div id="msg" role="status"></div>
+  <div class="meta" id="meta"></div>
+</main>
+
+<script>
+let current = null, timer = null;
+const $ = id => document.getElementById(id);
+
+async function load() {
+  const r = await fetch("/api/captcha", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({difficulty:$("difficulty").value, mode:$("mode").value})});
+  const d = await r.json();
+  if (!r.ok) { show(d.error, false); return; }
+  current = d;
+  $("img").src = d.image;
+  $("answer").value = ""; $("answer").focus();
+  if ($("listen")) $("listen").disabled = !d.audio;
+  show("", true);
+  countdown(d.expires_in);
+}
+
+function countdown(sec) {
+  clearInterval(timer);
+  const tick = () => { $("meta").textContent = sec > 0 ? `Expires in ${sec}s` : "Expired"; sec--; };
+  tick(); timer = setInterval(tick, 1000);
+}
+
+function show(text, ok) { $("msg").textContent = text; $("msg").className = ok ? "ok" : "bad"; }
+
+$("form").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!current) return;
+  const r = await fetch("/api/verify", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({id: current.id, answer: $("answer").value})});
+  const d = await r.json();
+  show(d.message, d.success);
+  if (d.success) { clearInterval(timer); $("meta").textContent = ""; current = null; }
+  else if (d.result !== "wrong") { setTimeout(load, 1200); }
+});
+
+$("refresh").onclick = load;
+$("difficulty").onchange = load;
+$("mode").onchange = load;
+if ($("listen")) $("listen").onclick = () => current?.audio && new Audio(current.audio).play();
+load();
+</script>
+</body>
+</html>
