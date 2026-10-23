@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Local leaderboard data (each player keeps their own)
+scores.json
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
